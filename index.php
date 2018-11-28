@@ -17,4 +17,5 @@ define('BASEPATH', dirname(__FILE__));
 
 $bootstrap = new Bootstrap();
 $bootstrap->run();
- ?>
+
+?>
