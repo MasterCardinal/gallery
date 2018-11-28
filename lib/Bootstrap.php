@@ -37,17 +37,34 @@ class Bootstrap {
     $actionMethod = sprintf("%sAction", strtolower($action));
     $reflection = new ReflectionClass($this->_controller);
     if (!$reflection->hasMethod($actionMethod)) {
-      throw new InvalidArgumentException("Controller unbekannt: $ctrl");
+      throw new InvalidArgumentException("$this->_controller hat keine Action: $action");
     }
-    $this->_controller = $ctrl;
+    $this->_action = $actionMethod;
   }
   private function setParams($params) {
     // ToDo: Parameter verarbeiten
+    // /index/view/id/1/filter/name
+    // params: id => 1, filter => name
+    $splitted = explode('/', $params);
+    if (count($splitted) % 2 > 0) {
+      throw new InvalidArgumentException("Parameteranzahl ungültig");
+    }
+    $paramArray = array();
+    $lastIndex =0;
+
+    for ($i=0; $i<count($splitted); $i++) {
+      if ($i % 2 > 0) {
+        $paramArray[$splitted[$lastIndex]] = $splitted[$i];
+      }
+      $lastIndex = $i;
+    }
+    $this->_params = $paramArray;
 
   }
 
   public function run() {
-
+    $ctrlObj = new $this->_controller;
+    $ctrlObj->{$this->_action}($this->params);
   }
 }
  ?>
