@@ -9,7 +9,7 @@ class index {
 
     // TODO: Bilder abrufen
 
-    // TODO: Bilder darstellen (template)
+    // TODO: Bilder darstellen (template) 
   }
 
   public function loginAction($params) {
