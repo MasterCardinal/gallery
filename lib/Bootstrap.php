@@ -1,19 +1,20 @@
 <?php
 class Bootstrap {
-  private $_controller = "";
-  private $_action = "";
+  private $controller = "";
+  private $action = "";
   private $params = array();
 
   public function __construct() {
     $this->_parseRequest();
   }
 
+  // Die URI aus dem Request zerlegen.
   private function _parseRequest() {
-    $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+    $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'); // Den ersten Slash entfernen
     @list($controller, $action, $params) = explode('/', $path, 3);
 
     // Controller?
-    $controller = (strlen($controller) > 0) ? $controller : 'index';
+    $controller = (strlen($controller) > 0) ? $controller : 'index'; // strlen() ermittelt die Stinglänge
     $this->setController($controller);
     // Action
     $action = (strlen($action) > 0) ? $action : 'index';
@@ -30,16 +31,16 @@ class Bootstrap {
     if (!class_exists($ctrl)) {
       throw new InvalidArgumentException("Controller unbekannt: $ctrl");
     }
-    $this->_controller = $ctrl;
+    $this->controller = $ctrl;
   }
   private function setAction($action) {
     // ToDo: Welche Methode in Klasse xyz
     $actionMethod = sprintf("%sAction", strtolower($action));
-    $reflection = new ReflectionClass($this->_controller);
+    $reflection = new ReflectionClass($this->controller);
     if (!$reflection->hasMethod($actionMethod)) {
-      throw new InvalidArgumentException("$this->_controller hat keine Action: $action");
+      throw new InvalidArgumentException("$this->controller hat keine Action: $action");
     }
-    $this->_action = $actionMethod;
+    $this->action = $actionMethod;
   }
   private function setParams($params) {
     // ToDo: Parameter verarbeiten
@@ -63,8 +64,8 @@ class Bootstrap {
   }
 
   public function run() {
-    $ctrlObj = new $this->_controller;
-    $ctrlObj->{$this->_action}($this->params);
+    $ctrlObj = new $this->controller;
+    $ctrlObj->{$this->action}($this->params);
   }
 }
  ?>
