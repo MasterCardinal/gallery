@@ -1,15 +1,19 @@
 <?php
 
 namespace Controller;
+use Model\Resource\Bild;
 
 class index {
   public function indexAction($params) {
-    echo "indexAction";
-    // TODO: Resource Model instanziieren
+    echo "<h1>indexAction</h1>";
+    // Resource Model instanziieren
+    $model = new Bild();
 
-    // TODO: Bilder abrufen
+    // Bilder abrufen
+    $bilder = $model->getBilder();
+    var_dump($bilder);
 
-    // TODO: Bilder darstellen (template) 
+    // TODO: Bilder darstellen (template)
   }
 
   public function loginAction($params) {
